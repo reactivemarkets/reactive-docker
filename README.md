@@ -16,8 +16,8 @@ Once the test-harness is running, customers can:
 To use this test-harness, you will need to obtain the following from your Reactive Markets
 representative:
 
-- the latest Reactive FIX specification.
-- a secure token for the Reactive container registry.
+- latest Reactive FIX specification.
+- secure token for the Reactive container registry.
 - passwords for database container images.
 
 ## Container Registry
@@ -30,8 +30,8 @@ account manager:
 docker login -u <username> -p <token> registry.gitlab.com
 ```
 
-Please contact [support@reactivemarkets.com](mailto:support@reactivemarkets.com) if you unable to access the registry with the
-token provided.
+Please contact [support@reactivemarkets.com](mailto:support@reactivemarkets.com) if you unable to
+access the registry with the token provided.
 
 ## Container Passwords
 
@@ -42,8 +42,10 @@ variables in a `.env` file alongside the `docker-compose.yml` file.
 For example:
 
 ```bash
-MYSQL_ROOT_PASSWORD=XXXX >>.env
-REACTIVE_SQL_PASS=XXXX >>.env
+cat <<EOF >.env
+> MYSQL_ROOT_PASSWORD=xxxx
+> REACTIVE_SQL_PASS=xxxx
+> EOF
 ```
 
 Once set, verify that the passwords are correct expanded by the `docker-compose` command:
