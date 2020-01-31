@@ -21,8 +21,6 @@ services:
     container_name: redis
     networks:
       - reactive-net
-    ports:
-      - 6379:6379
     restart: on-failure
     volumes:
       - ./conf/redis.conf:/usr/local/etc/redis/redis.conf:ro

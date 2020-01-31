@@ -19,9 +19,6 @@ You will need the following from your Reactive Markets representative.
 - a secure token for the Reactive container registry.
 - passwords for database container images.
 
-Recommended: customers should also install the Redis command-line interface for sending instructions
-to the test-harness.
-
 ## Container Registry
 
 Access to the Reactive container registry is available to customers and partners of Reactive
@@ -29,10 +26,10 @@ Markets. Login to the Reactive container registry using the username and token p
 account manager:
 
 ```bash
-$ docker login -u <username> -p <token> registry.gitlab.com
+docker login -u <username> -p <token> registry.gitlab.com
 ```
 
-Please contact <mailto:support@reactivemarkets.com> if you unable to access the registry with the
+Please contact [support@reactivemarkets.com](mailto:support@reactivemarkets.com) if you unable to access the registry with the
 token provided.
 
 ## Container Passwords
@@ -44,15 +41,15 @@ variables in a `.env` file alongside the `docker-compose.yml` file.
 For example:
 
 ```bash
-$ MYSQL_ROOT_PASSWORD=XXXX >>.env
-$ REACTIVE_SQL_PASS=XXXX >>.env
+MYSQL_ROOT_PASSWORD=XXXX >>.env
+REACTIVE_SQL_PASS=XXXX >>.env
 ```
 
 Once set, verify that the passwords are correct expanded by the `docker-compose` command:
 
 ```bash
-$ cat .env
-$ docker-compose config | grep -i pass
+cat .env
+docker-compose config | grep -i pass
 ```
 
 ## FIX Sessions
@@ -79,16 +76,22 @@ The [Toolbox Java](https://github.com/reactivemarkets/toolbox-java) project cont
 [QuickFIX](https://www.quickfixj.org/) application that can be used for basic connectivity testing:
 
 ```bash
-$ git clone git@github.com:reactivemarkets/toolbox-java.git
-$ cd toolbox-java/
-$ gradle build
-$ java -jar build/libs/toolbox-java-x.x-SNAPSHOT-all.jar
+git clone git@github.com:reactivemarkets/toolbox-java.git
+cd toolbox-java/
+gradle build
+java -jar build/libs/toolbox-java-x.x-SNAPSHOT-all.jar
 ```
 
 This sample application can also be run using the Gradle "run" target. This is not recommended,
 however, because the Gradle wrapper does not forward signals correctly to the Java application.
 
 ## Reference Data
+
+You can run commands against our redis instance, to enter the command line interface first run:
+
+```bash
+docker exec -it redis redis-cli
+```
 
 List all venues, instruments and markets:
 
