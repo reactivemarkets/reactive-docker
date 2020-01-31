@@ -1,0 +1,108 @@
+---
+version: "3"
+services:
+  mariadb:
+    image: registry.gitlab.com/reactivemarkets/private-registry/mariadb:beta
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: 1
+    networks:
+      - reactive-net
+    ports:
+      - 3306:3306
+    restart: on-failure
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:5-alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    container_name: redis
+    networks:
+      - reactive-net
+    ports:
+      - 6379:6379
+    restart: on-failure
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf:ro
+
+  refdata:
+    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:beta
+    command: refdata
+    container_name: refdata
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      REACTIVE_SQL_TYPE: mysql
+      REACTIVE_SQL_HOST: mariadb
+      REACTIVE_SQL_USER: reactiveuser
+      REACTIVE_SQL_PASS: ${REACTIVE_SQL_PASS}
+      REACTIVE_SQL_NAME: uatdb
+      REACTIVE_SQL_PORT: 3306
+      REACTIVE_REDIS_HOST: redis
+      REACTIVE_REDIS_PORT: 6379
+    networks:
+      - reactive-net
+    restart: on-failure
+
+  revalrates:
+    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:beta
+    command: revalrates
+    container_name: revalrates
+    depends_on:
+      - refdata
+    environment:
+      REACTIVE_REDIS_HOST: redis
+      REACTIVE_REDIS_PORT: 6379
+    networks:
+      - reactive-net
+    restart: on-failure
+
+  crossfix:
+    image: registry.gitlab.com/reactivemarkets/private-registry/matchbox-cpp:beta
+    entrypoint: /opt/reactivemarkets/matchbox/bin/matchbox-crossfix
+    command: ["-f", "/cpp/etc/matchbox-crossfix.conf"]
+    container_name: crossfix
+    depends_on:
+      - mariadb
+    environment:
+      REACTIVE_CONFIG_PATH: /cpp/etc
+      REACTIVE_SQL_TYPE: mysql
+      REACTIVE_SQL_HOST: mariadb
+      REACTIVE_SQL_USER: reactiveuser
+      REACTIVE_SQL_PASS: ${REACTIVE_SQL_PASS}
+      REACTIVE_SQL_NAME: uatdb
+      REACTIVE_SQL_PORT: 3306
+    ipc: host
+    networks:
+      - reactive-net
+    ports:
+      - 8285:8285
+    restart: on-failure
+    volumes:
+      - ./conf/crossfix.conf:/cpp/etc/matchbox-crossfix.conf:ro
+      - ./conf/crossfix-fix.conf:/cpp/etc/matchbox-crossfix-fix.conf:ro
+
+  clientpricer:
+    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:beta
+    command: ["clientpricer", "--config=/go/etc/clientpricer.conf"]
+    container_name: clientpricer
+    depends_on:
+      - revalrates
+    environment:
+      REACTIVE_REDIS_HOST: redis
+      REACTIVE_REDIS_PORT: 6379
+    ipc: host
+    networks:
+      - reactive-net
+    restart: on-failure
+    volumes:
+      - ./conf/clientpricer.conf:/go/etc/clientpricer.conf:ro
+
+networks:
+  reactive-net:
+
+volumes:
+  mysql-data:
