@@ -1,19 +1,20 @@
-# Docker
+# Toolbox Test
 
-The Docker compose file in this directory aims to provide customers with a test-harness that can be
-used for FIX integration testing.
+The purpose of this project is to provide customers with a test-harness that can be used for FIX
+integration testing.
 
-Once the test-harness is running, users can:
+Once the test-harness is running, customers can:
 
 - initiate FIX connections to the test-harness.
-- send messages to the test-harness via Redis.
+- interact with the test-harness using Redis commands.
 - receive market-data requests from the test-harness.
 - send market-data snapshots to the test-harness.
 - test the new order single workflow.
 
 ## Prerequisites
 
-You will need the following from your Reactive Markets representative.
+To use this test-harness, you will need to obtain the following from your Reactive Markets
+representative:
 
 - the latest Reactive FIX specification.
 - a secure token for the Reactive container registry.
@@ -67,8 +68,8 @@ The test-harness exposes the following FIX sessions:
 | Hotspot FX Quote | MAKERMD_HSP  | TAKERMD_HSP  |
 | Hotspot FX Order | MAKER_HSP    | TAKER_HSP    |
 
-N.B. the SenderCompID and TargetCompID in the table above are from the customer's perspective,
-so they can be mapped directly into customer FIX session configuration.
+N.B. the SenderCompID and TargetCompID in the table above are from the customer's perspective, so
+they can be mapped directly into customer FIX session configuration.
 
 ## QuickFIX Example
 
