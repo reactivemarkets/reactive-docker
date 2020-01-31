@@ -60,7 +60,7 @@ $ docker-compose config | grep -i pass
 The test-harness exposes the following FIX sessions:
 
 | Name             | SenderCompID | TargetCompID |
-|------------------+--------------+--------------|
+|------------------|--------------|--------------|
 | Currenex Quote   | MAKERMD_CNX  | TAKERMD_CNX  |
 | Currenex Order   | MAKER_CNX    | TAKER_CNX    |
 | EBS London Quote | MAKERMD_EBL  | TAKERMD_EBL  |
