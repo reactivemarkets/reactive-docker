@@ -18,7 +18,6 @@ representative:
 
 - latest Reactive FIX specification.
 - secure token for the Reactive container registry.
-- passwords for database container images.
 
 ## Container Registry
 
@@ -33,32 +32,9 @@ docker login -u <username> -p <token> registry.gitlab.com
 Please contact [support@reactivemarkets.com](mailto:support@reactivemarkets.com) if you unable to
 access the registry with the token provided.
 
-## Container Passwords
-
-The Docker compose file runs several containers, including a database. Databases provided by the
-database container are password protected. Passwords can be specified by setting environment
-variables in a `.env` file alongside the `docker-compose.yml` file.
-
-For example:
-
-```bash
-cat <<EOF >.env
-> MYSQL_ROOT_PASSWORD=xxxx
-> REACTIVE_SQL_PASS=xxxx
-> EOF
-```
-
-Once set, verify that the passwords are correct expanded by the `docker-compose` command:
-
-```bash
-cat .env
-docker-compose config | grep -i pass
-```
-
 ## Container Commands
 
 Run the Docker compose `up` command to create and start all containers:
-
 
 ```bash
 docker-compose up
