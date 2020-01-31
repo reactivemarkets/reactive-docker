@@ -130,13 +130,18 @@ java -jar build/libs/toolbox-java-x.x-SNAPSHOT-all.jar
 This sample application can also be run using the Gradle "run" target. This is not recommended,
 however, because the Gradle wrapper does not forward signals correctly to the Java application.
 
-## Reference Data
+## Redis Commands
 
-You can run commands against our redis instance, to enter the command line interface first run:
+The Redis Command-Line Interface (CLI) can be used to interact with the test-harness.
+To enter the Redis CLI, first run:
 
 ```bash
 docker exec -it redis redis-cli
 ```
+
+Command commands are documented in the sections below.
+
+### Reference Data
 
 List all venues, instruments and markets:
 
@@ -152,7 +157,7 @@ Print all fields for a particular market:
 > HGETALL markets:EURUSD-EBL
 ```
 
-## Subscriptions
+### Subscriptions
 
 Add a market-data subscription:
 
@@ -170,4 +175,22 @@ Remove a market-data subscription:
 
 ```bash
 > DEL "sub.bucket.l2:1::EURUSD-EBL"
+```
+
+### Orders
+
+Orders will be rejected if the user's trading account does not exist or there are insufficient funds
+in the trading account.
+
+Create an account and deposit funds into the account:
+
+```bash
+> XADD bucket.stream:1 * msg_type 30 symbol 1
+> XADD bucket.stream:1 * msg_type 29 accnt 1 action 1 asset USD 50000000
+```
+
+Submit a Fill Or Kill (FOK) order:
+
+```bash
+> XADD bucket.stream:1 * msg_type 19 accnt 1 market EURUSD-EBL cl_order_id test strat_type FOK side 1 qty 1000000 price 1.1026
 ```
