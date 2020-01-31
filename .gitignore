@@ -1,5 +1,8 @@
+# Temporary files.
+*~
+
 # Docker config.
 .env
 
-# Temporary files.
-*~
+# IDEs.
+.idea/
