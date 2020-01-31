@@ -55,9 +55,51 @@ cat .env
 docker-compose config | grep -i pass
 ```
 
+## Container Commands
+
+Run the Docker compose `up` command to create and start all containers:
+
+
+```bash
+docker-compose up
+```
+
+This command will start all containers in the foreground. Use the `-d` option to start them in the
+background, and the `logs` command to tail the logs:
+
+```bash
+docker-compose up -d
+docker-compose logs -f
+```
+
+Containers running in the background should be stopped using the `down` command:
+
+```bash
+docker-compose down
+```
+
+The following Docker `prune` command will purge all containers, networks, volumes and images:
+
+```bash
+docker system prune --all --volumes
+```
+
+This can be useful to ensure a pristine system restart.
+
 ## FIX Sessions
 
-The test-harness exposes the following FIX sessions:
+Client FIX applications can connect to the test-harness by initiating a TCP connection to port 8285
+on localhost. All FIX sessions should be configured with the following properties:
+
+| Name              |     Value |
+|-------------------|-----------|
+| BeginString       |   FIX.4.4 |
+| HeartBtInt        |        30 |
+| ConnectionType    | initiator |
+| SocketConnectPort |      8285 |
+| SocketConnectHost | 127.0.0.1 |
+
+The test-harness supports the following FIX sessions:
 
 | Name             | SenderCompID | TargetCompID |
 |------------------|--------------|--------------|
