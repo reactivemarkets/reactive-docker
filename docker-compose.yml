@@ -10,8 +10,6 @@ services:
       REACTIVE_SQL_PASS: test
     networks:
       - reactive-net
-    ports:
-      - 3306:3306
     restart: on-failure
     volumes:
       - mysql-data:/var/lib/mysql
