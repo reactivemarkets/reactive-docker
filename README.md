@@ -162,7 +162,7 @@ Create an account and deposit funds into the account:
 
 ```bash
 > XADD bucket.stream:1 * msg_type 30 symbol 1
-> XADD bucket.stream:1 * msg_type 29 accnt 1 action 1 asset USD 50000000
+> XADD bucket.stream:1 * msg_type 29 accnt 1 action 1 asset USD qty 50000000
 ```
 
 Submit a Fill Or Kill (FOK) order:
