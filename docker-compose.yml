@@ -1,9 +1,17 @@
 ---
 version: "3"
 services:
+  init:
+    image: registry.gitlab.com/reactivemarkets/private-registry/schema:beta
+    container_name: init
+    volumes:
+      - mysql-init:/schema/mariadb
+
   mariadb:
-    image: registry.gitlab.com/reactivemarkets/private-registry/mariadb-uat:${REACTIVE_TAG}
+    image: mariadb:latest
     container_name: mariadb
+    depends_on:
+      - init
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_INITDB_SKIP_TZINFO: 1
@@ -13,6 +21,7 @@ services:
     restart: on-failure
     volumes:
       - mysql-data:/var/lib/mysql
+      - mysql-init:/docker-entrypoint-initdb.d
 
   redis:
     image: redis:5-alpine
@@ -59,13 +68,13 @@ services:
 
   crossfix:
     image: registry.gitlab.com/reactivemarkets/private-registry/matchbox-cpp:${REACTIVE_TAG}
-    entrypoint: /opt/reactivemarkets/matchbox/bin/matchbox-crossfix
-    command: ["-f", "/cpp/etc/matchbox-crossfix.conf"]
+    entrypoint: /cpp/bin/matchbox-crossfix
+    command: ["-f", "matchbox-crossfix.conf"]
     container_name: crossfix
     depends_on:
       - mariadb
     environment:
-      REACTIVE_CONFIG_PATH: /cpp/etc
+      REACTIVE_PATH: /cpp/etc
       REACTIVE_SQL_TYPE: mysql
       REACTIVE_SQL_HOST: mariadb
       REACTIVE_SQL_USER: reactiveuser
@@ -84,11 +93,12 @@ services:
 
   clientpricer:
     image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:${REACTIVE_TAG}
-    command: ["clientpricer", "--config=/go/etc/clientpricer.conf"]
+    command: ["clientpricer", "--config=clientpricer.conf"]
     container_name: clientpricer
     depends_on:
       - revalrates
     environment:
+      REACTIVE_PATH: /go/etc
       REACTIVE_REDIS_HOST: redis
       REACTIVE_REDIS_PORT: 6379
     ipc: host
@@ -103,3 +113,4 @@ networks:
 
 volumes:
   mysql-data:
+  mysql-init:
