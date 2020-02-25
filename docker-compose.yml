@@ -1,17 +1,30 @@
+# Copyright (C) 2020 Reactive Markets Limited
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 ---
 version: "3"
 services:
-  init:
-    image: registry.gitlab.com/reactivemarkets/private-registry/schema:beta
-    container_name: init
+  schema:
+    container_name: schema
+    image: registry.gitlab.com/reactivemarkets/private-registry/schema:${REACTIVE_TAG}
     volumes:
       - mysql-init:/schema/mariadb
 
   mariadb:
-    image: mariadb:latest
     container_name: mariadb
+    image: mariadb:latest
     depends_on:
-      - init
+      - schema
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_INITDB_SKIP_TZINFO: 1
@@ -24,9 +37,9 @@ services:
       - mysql-init:/docker-entrypoint-initdb.d
 
   redis:
+    container_name: redis
     image: redis:5-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
-    container_name: redis
     networks:
       - reactive-net
     restart: on-failure
@@ -34,9 +47,9 @@ services:
       - ./conf/redis.conf:/usr/local/etc/redis/redis.conf:ro
 
   refdata:
-    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:${REACTIVE_TAG}
-    command: refdata
     container_name: refdata
+    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    command: refdata
     depends_on:
       - mariadb
       - redis
@@ -54,9 +67,9 @@ services:
     restart: on-failure
 
   revalrates:
-    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:${REACTIVE_TAG}
-    command: revalrates
     container_name: revalrates
+    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    command: revalrates
     depends_on:
       - refdata
     environment:
@@ -67,10 +80,10 @@ services:
     restart: on-failure
 
   crossfix:
-    image: registry.gitlab.com/reactivemarkets/private-registry/matchbox-cpp:${REACTIVE_TAG}
-    entrypoint: /cpp/bin/matchbox-crossfix
-    command: ["-f", "matchbox-crossfix.conf"]
     container_name: crossfix
+    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
+    entrypoint: /cpp/bin/re-crossfix
+    command: ["-f", "crossfix.conf"]
     depends_on:
       - mariadb
     environment:
@@ -88,13 +101,13 @@ services:
       - 8285:8285
     restart: on-failure
     volumes:
-      - ./conf/crossfix.conf:/cpp/etc/matchbox-crossfix.conf:ro
-      - ./conf/crossfix-fix.conf:/cpp/etc/matchbox-crossfix-fix.conf:ro
+      - ./conf/crossfix.conf:/cpp/etc/crossfix.conf:ro
+      - ./conf/crossfix-fix.conf:/cpp/etc/crossfix-fix.conf:ro
 
   clientpricer:
-    image: registry.gitlab.com/reactivemarkets/private-registry/toolbox-go:${REACTIVE_TAG}
-    command: ["clientpricer", "--config=clientpricer.conf"]
     container_name: clientpricer
+    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    command: ["clientpricer", "--config=clientpricer.conf"]
     depends_on:
       - revalrates
     environment:
