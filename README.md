@@ -100,7 +100,7 @@ The [Toolbox Java](https://github.com/reactivemarkets/toolbox-java) project cont
 git clone git@github.com:reactivemarkets/toolbox-java.git
 cd toolbox-java/
 gradle build
-java -jar build/libs/toolbox-java-x.x-SNAPSHOT-all.jar
+java -jar build/libs/toolbox-java-beta-all.jar
 ```
 
 This sample application can also be run using the Gradle "run" target. This is not recommended,
