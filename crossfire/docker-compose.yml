@@ -18,7 +18,7 @@ services:
     container_name: schema
     image: registry.gitlab.com/reactivemarkets/private-registry/schema:${REACTIVE_TAG}
     volumes:
-      - mysql-init:/schema/mariadb
+      - mysql-init:/schema/mariadb:ro
 
   mariadb:
     container_name: mariadb
@@ -34,7 +34,7 @@ services:
     restart: on-failure
     volumes:
       - mysql-data:/var/lib/mysql
-      - mysql-init:/docker-entrypoint-initdb.d
+      - mysql-init:/docker-entrypoint-initdb.d:ro
 
   redis:
     container_name: redis
@@ -44,7 +44,7 @@ services:
       - reactive-net
     restart: on-failure
     volumes:
-      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./etc/redis.conf:/usr/local/etc/redis/redis.conf:ro
 
   refdata:
     container_name: refdata
@@ -83,7 +83,7 @@ services:
     container_name: crossfix
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
     entrypoint: /cpp/bin/re-crossfix
-    command: ["-f", "crossfix.conf"]
+    command: -f crossfix.conf
     depends_on:
       - mariadb
     environment:
@@ -101,13 +101,12 @@ services:
       - 8285:8285
     restart: on-failure
     volumes:
-      - ./conf/crossfix.conf:/cpp/etc/crossfix.conf:ro
-      - ./conf/crossfix-fix.conf:/cpp/etc/crossfix-fix.conf:ro
+      - ./etc:/cpp/etc:ro
 
   clientpricer:
     container_name: clientpricer
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
-    command: ["clientpricer", "--config=clientpricer.conf"]
+    command: clientpricer --config=clientpricer.conf
     depends_on:
       - revalrates
     environment:
@@ -119,7 +118,7 @@ services:
       - reactive-net
     restart: on-failure
     volumes:
-      - ./conf/clientpricer.conf:/go/etc/clientpricer.conf:ro
+      - ./etc:/go/etc:ro
 
 networks:
   reactive-net:
