@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-version: "3"
+version: "3.5"
 services:
   schema:
-    container_name: schema
+    container_name: crossfire-schema
     image: registry.gitlab.com/reactivemarkets/private-registry/schema:${REACTIVE_TAG}
     volumes:
       - mysql-init:/schema/mariadb:ro
 
   mariadb:
-    container_name: mariadb
+    container_name: crossfire-mariadb
     image: mariadb:latest
     depends_on:
       - schema
@@ -30,24 +30,24 @@ services:
       MYSQL_INITDB_SKIP_TZINFO: 1
       REACTIVE_SQL_PASS: test
     networks:
-      - reactive-net
+      - crossfire-net
     restart: on-failure
     volumes:
       - mysql-data:/var/lib/mysql
       - mysql-init:/docker-entrypoint-initdb.d:ro
 
   redis:
-    container_name: redis
+    container_name: crossfire-redis
     image: redis:5-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
     networks:
-      - reactive-net
+      - crossfire-net
     restart: on-failure
     volumes:
       - ./etc/redis.conf:/usr/local/etc/redis/redis.conf:ro
 
   refdata:
-    container_name: refdata
+    container_name: crossfire-refdata
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
     command: refdata
     depends_on:
@@ -63,11 +63,11 @@ services:
       REACTIVE_REDIS_HOST: redis
       REACTIVE_REDIS_PORT: 6379
     networks:
-      - reactive-net
+      - crossfire-net
     restart: on-failure
 
   revalrates:
-    container_name: revalrates
+    container_name: crossfire-revalrates
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
     command: revalrates
     depends_on:
@@ -76,11 +76,11 @@ services:
       REACTIVE_REDIS_HOST: redis
       REACTIVE_REDIS_PORT: 6379
     networks:
-      - reactive-net
+      - crossfire-net
     restart: on-failure
 
   crossfix:
-    container_name: crossfix
+    container_name: crossfire-crossfix
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
     entrypoint: /cpp/bin/re-crossfix
     command: -f crossfix.conf
@@ -96,7 +96,7 @@ services:
       REACTIVE_SQL_PORT: 3306
     ipc: host
     networks:
-      - reactive-net
+      - crossfire-net
     ports:
       - 8285:8285
     restart: on-failure
@@ -104,7 +104,7 @@ services:
       - ./etc:/cpp/etc:ro
 
   clientpricer:
-    container_name: clientpricer
+    container_name: crossfire-clientpricer
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
     command: clientpricer --config=clientpricer.conf
     depends_on:
@@ -115,14 +115,17 @@ services:
       REACTIVE_REDIS_PORT: 6379
     ipc: host
     networks:
-      - reactive-net
+      - crossfire-net
     restart: on-failure
     volumes:
       - ./etc:/go/etc:ro
 
 networks:
-  reactive-net:
+  crossfire-net:
+    name: crossfire-net
 
 volumes:
   mysql-data:
+    name: crossfire-mysql-data
   mysql-init:
+    name: crossfire-mysql-init
