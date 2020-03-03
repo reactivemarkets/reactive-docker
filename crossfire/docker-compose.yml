@@ -79,11 +79,11 @@ services:
       - crossfire-net
     restart: on-failure
 
-  crossfix:
-    container_name: crossfire-crossfix
+  takerfix:
+    container_name: crossfire-takerfix
     image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
-    entrypoint: /cpp/bin/re-crossfix
-    command: -f crossfix.conf
+    entrypoint: /cpp/bin/re-takerfix
+    command: -f takerfix.conf
     depends_on:
       - mariadb
     environment:

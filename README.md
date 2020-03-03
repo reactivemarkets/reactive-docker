@@ -13,8 +13,8 @@ team:
 ## Container Registry
 
 Access to the Reactive container registry is available to customers and partners of Reactive
-Markets. Login to the Reactive container registry using the username and token provided by your
-account manager:
+Markets. Login to the Reactive container registry using the username and token provided by the
+support team:
 
 ```bash
 $ docker login -u <username> -p <token> registry.gitlab.com
