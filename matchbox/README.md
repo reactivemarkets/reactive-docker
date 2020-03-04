@@ -1,9 +1,23 @@
 # Matchbox
 
+Matchbox is the fast, lightweight, efficient matching engine that sits at the heart of our exchange
+product suite. The core product is designed to meet the demanding requirements of high frequency
+trading internalisation which requires predictable, consistent low latency.
+
+## Architecture
+
+Matchbox comprises two separate programs that communicate via IPC channels:
+
+- Matchfix: the FIX engine.
+- Matchlob: the Limit Order Book (LOB).
+
+In addition to matching, Matchlob is also responsible for writing to a transaction journal.
+The Docker-compose configuration uses a SQLite transaction journal.
+
 ## FIX Sessions
 
-Client FIX applications can connect to the test-harness by initiating a TCP connection to port 8282
-on localhost. All FIX sessions should be configured with the following properties:
+Client FIX applications can connect to Matchbox by initiating a TCP connection to port 8282 on
+localhost. All Client FIX sessions should be configured with the following properties:
 
 | Name              |     Value |
 |-------------------|-----------|
@@ -13,7 +27,7 @@ on localhost. All FIX sessions should be configured with the following propertie
 | SocketConnectPort |      8282 |
 | SocketConnectHost | 127.0.0.1 |
 
-The test-harness supports the following FIX sessions:
+The Matchbox configuration supports the following FIX sessions:
 
 | Name          | Type        | SenderCompID | TargetCompID |
 |---------------|-------------|--------------|--------------|

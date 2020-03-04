@@ -1,29 +1,29 @@
-# Toolbox Test
+# Reactive Test
 
-This project provides Docker-based test-harnesses for Crossfire and Matchbox integration testing.
+This project provides Docker-compose files for:
+
+- Crossfire integration testing.
+- The Matchbox matching engine.
 
 ## Prerequisites
 
-To use these test-harnesses, you will need to obtain the following from the Reactive Markets support
-team:
+Please contact the [Reactive Markets support team](support@reactivemarkets.com) for:
 
-- latest Reactive FIX specification.
-- secure token for the Reactive container registry.
+- our latest Reactive FIX specification.
+- a container registry token.
 
 ## Container Registry
 
-Access to the Reactive container registry is available to customers and partners of Reactive
-Markets. Login to the Reactive container registry using the username and token provided by the
-support team:
+Docker images are hosted in a private registry. Login to the Reactive container registry using the
+username and token provided by the support team:
 
 ```bash
 $ docker login -u <username> -p <token> registry.gitlab.com
 ```
 
-Please contact [support@reactivemarkets.com](mailto:support@reactivemarkets.com) if you unable to
-access the registry with the token provided.
+## Docker Commands
 
-## Container Commands
+Docker-compose files are available in the crossfire and matchbox sub-directories.
 
 Run the Docker compose `up` command to create and start all containers:
 
@@ -60,8 +60,8 @@ for submitting pull requests.
 
 ## Versioning
 
-We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [tags on
-this repository](https://github.com/reactivemarkets/toolbox-java/tags).
+We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [releases
+page](https://github.com/reactivemarkets/reactive-test/releases).
 
 ## License
 

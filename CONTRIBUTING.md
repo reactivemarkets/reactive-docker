@@ -60,6 +60,6 @@ We actively welcome your pull requests.
 
 ## License
 
-By contributing to Toolbox Test, you agree that your contributions will be licensed under the
+By contributing to Reactive Test, you agree that your contributions will be licensed under the
 [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). A copy of the license is
 available in the [LICENSE.md](LICENSE.md) file in the root directory of this source tree.
