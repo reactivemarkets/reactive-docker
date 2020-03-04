@@ -10,8 +10,8 @@ The Crossfire test-harness allows customers to:
 
 ## FIX Sessions
 
-Client FIX applications can connect to the test-harness by initiating a TCP connection to port 8285
-on localhost. All FIX sessions should be configured with the following properties:
+Client FIX applications can connect to Crossfire by initiating a TCP connection to port 8285 on
+localhost. All Client FIX sessions should be configured with the following properties:
 
 | Name              |     Value |
 |-------------------|-----------|
@@ -21,7 +21,7 @@ on localhost. All FIX sessions should be configured with the following propertie
 | SocketConnectPort |      8285 |
 | SocketConnectHost | 127.0.0.1 |
 
-The test-harness supports the following FIX sessions:
+The Crossfire configuration supports the following FIX sessions:
 
 | Name                | Type  | SenderCompID | TargetCompID |
 |---------------------|-------|--------------|--------------|
@@ -43,14 +43,14 @@ they can be mapped directly into customer FIX session configuration.
 
 ## QuickFIX Example
 
-The [Toolbox Java](https://github.com/reactivemarkets/toolbox-java) project contains a simple,
+The [Platform Java](https://github.com/reactivemarkets/platform-java) project contains a simple,
 [QuickFIX](https://www.quickfixj.org/) application that can be used for basic connectivity testing:
 
 ```bash
-$ git clone git@github.com:reactivemarkets/toolbox-java.git
-$ cd toolbox-java/
+$ git clone git@github.com:reactivemarkets/platform-java.git
+$ cd platform-java/
 $ gradle build
-$ java -jar build/libs/toolbox-java-x.x-SNAPSHOT-all.jar
+$ java -jar build/libs/platform-java-x.x-SNAPSHOT-all.jar
 ```
 
 This sample application can also be run using the Gradle "run" target. This is not recommended,
