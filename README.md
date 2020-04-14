@@ -1,4 +1,4 @@
-# Reactive Test
+# Reactive Docker
 
 This project provides Docker-compose files for:
 
@@ -61,7 +61,7 @@ for submitting pull requests.
 ## Versioning
 
 We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [releases
-page](https://github.com/reactivemarkets/reactive-test/releases).
+page](https://github.com/reactivemarkets/reactive-docker/releases).
 
 ## License
 
