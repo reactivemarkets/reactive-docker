@@ -29,6 +29,7 @@ services:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_INITDB_SKIP_TZINFO: 1
       REACTIVE_SQL_PASS: test
+      REACTIVE_SQL_SCHEMA: uat
     networks:
       - crossfire-net
     restart: on-failure
@@ -58,7 +59,7 @@ services:
       REACTIVE_SQL_HOST: mariadb
       REACTIVE_SQL_USER: reactiveuser
       REACTIVE_SQL_PASS: test
-      REACTIVE_SQL_NAME: uatdb
+      REACTIVE_SQL_NAME: reactivedb
       REACTIVE_SQL_PORT: 3306
       REACTIVE_REDIS_HOST: redis
       REACTIVE_REDIS_PORT: 6379
@@ -92,7 +93,7 @@ services:
       REACTIVE_SQL_HOST: mariadb
       REACTIVE_SQL_USER: reactiveuser
       REACTIVE_SQL_PASS: test
-      REACTIVE_SQL_NAME: uatdb
+      REACTIVE_SQL_NAME: reactivedb
       REACTIVE_SQL_PORT: 3306
     ipc: host
     networks:
