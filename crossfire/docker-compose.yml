@@ -16,7 +16,7 @@ version: "3.5"
 services:
   schema:
     container_name: crossfire-schema
-    image: registry.gitlab.com/reactivemarkets/private-registry/schema:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/schema:${REACTIVE_TAG}
     volumes:
       - mysql-init:/schema/mariadb:ro
 
@@ -49,7 +49,7 @@ services:
 
   refdata:
     container_name: crossfire-refdata
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-go:${REACTIVE_TAG}
     command: refdata
     depends_on:
       - mariadb
@@ -69,7 +69,7 @@ services:
 
   revalrates:
     container_name: crossfire-revalrates
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-go:${REACTIVE_TAG}
     command: revalrates
     depends_on:
       - refdata
@@ -82,7 +82,7 @@ services:
 
   takerfix:
     container_name: crossfire-takerfix
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-cpp:${REACTIVE_TAG}
     entrypoint: /cpp/bin/re-takerfix
     command: -f takerfix.conf
     depends_on:
@@ -106,7 +106,7 @@ services:
 
   clientpricer:
     container_name: crossfire-clientpricer
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-go:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-go:${REACTIVE_TAG}
     command: clientpricer --config=clientpricer.conf
     depends_on:
       - revalrates
