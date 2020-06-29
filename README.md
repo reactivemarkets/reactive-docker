@@ -18,7 +18,7 @@ Docker images are hosted in a private registry. Login to the Reactive container 
 username and token provided by the support team:
 
 ```bash
-$ docker login -u <username> -p <token> registry.gitlab.com
+$ docker login -u <username> -p <token> gcr.io
 ```
 
 ## Docker Commands

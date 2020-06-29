@@ -16,13 +16,13 @@ version: "3.5"
 services:
   schema:
     container_name: matchbox-schema
-    image: registry.gitlab.com/reactivemarkets/private-registry/schema:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/schema:${REACTIVE_TAG}
     volumes:
       - sqlite-data:/schema/sqlite/db
 
   matchlob:
     container_name: matchbox-matchlob
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-cpp:${REACTIVE_TAG}
     entrypoint: /cpp/bin/re-matchlob
     command: -f matchlob.conf
     environment:
@@ -39,7 +39,7 @@ services:
 
   matchfix:
     container_name: matchbox-matchfix
-    image: registry.gitlab.com/reactivemarkets/private-registry/reactive-cpp:${REACTIVE_TAG}
+    image: gcr.io/reactivemarkets/reactive-cpp:${REACTIVE_TAG}
     entrypoint: /cpp/bin/re-matchfix
     command: -f matchfix.conf
     environment:
@@ -47,6 +47,8 @@ services:
     ipc: host
     networks:
       - matchbox-net
+    ports:
+      - 8282:8282
     restart: on-failure
     volumes:
       - ./etc:/cpp/etc:ro
